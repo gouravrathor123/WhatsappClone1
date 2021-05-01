@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/CameraView.dart';
@@ -14,8 +16,9 @@ class _CameraScreenState extends State<CameraScreen> {
   CameraController _cameraController;
   Future<void> cameraValue;
   bool isRecording = false;
-  var videopath;
-
+  bool flash = false;
+  bool iscamerafront=true;
+  double transform=0;
   @override
   void initState() {
     // TODO: implement initState
@@ -42,7 +45,11 @@ class _CameraScreenState extends State<CameraScreen> {
               future: cameraValue,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  return CameraPreview(_cameraController);
+                  return Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: CameraPreview(_cameraController),
+                  );
                 } else {
                   return Center(
                     child: CircularProgressIndicator(),
@@ -65,11 +72,18 @@ class _CameraScreenState extends State<CameraScreen> {
                     children: [
                       IconButton(
                         icon: Icon(
-                          Icons.flash_off,
+                          flash ? Icons.flash_on : Icons.flash_off,
                           color: Colors.white,
                           size: 28,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            flash = !flash;
+                          });
+                          flash
+                              ? _cameraController.setFlashMode(FlashMode.torch)
+                              : _cameraController.setFlashMode(FlashMode.off);
+                        },
                       ),
                       GestureDetector(
                         onLongPress: () async {
@@ -111,12 +125,24 @@ class _CameraScreenState extends State<CameraScreen> {
                               ),
                       ),
                       IconButton(
-                        icon: Icon(
-                          Icons.flip_camera_ios,
-                          color: Colors.white,
-                          size: 28,
+                        icon: Transform.rotate(
+                          angle: transform,
+                          child: Icon(
+                            Icons.flip_camera_ios,
+                            color: Colors.white,
+                            size: 28,
+                          ),
                         ),
-                        onPressed: () {},
+                        onPressed: () async{
+                          setState(() {
+                            iscamerafront=!iscamerafront;
+                            transform=transform+pi;
+                          });
+                          int camerapos = iscamerafront?0:1;
+                          _cameraController = CameraController(
+                              cameras[camerapos], ResolutionPreset.high);
+                          cameraValue = _cameraController.initialize();
+                        },
                       ),
                     ],
                   ),
