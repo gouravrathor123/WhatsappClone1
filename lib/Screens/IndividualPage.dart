@@ -5,6 +5,7 @@ import 'package:flutter_app/CustomUI/OwnMessageCard.dart';
 import 'package:flutter_app/CustomUI/ReplyCard.dart';
 import 'package:flutter_app/Model/ChatsModel.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class IndividualPage extends StatefulWidget {
   const IndividualPage({Key key, this.chatModel}) : super(key: key);
@@ -17,12 +18,16 @@ class IndividualPage extends StatefulWidget {
 class _IndividualPageState extends State<IndividualPage> {
   bool show = false;
   FocusNode focusNode = FocusNode();
+  IO.Socket socket;
+  bool sendButton=false;
+
   TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    connect();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         setState(() {
@@ -30,6 +35,18 @@ class _IndividualPageState extends State<IndividualPage> {
         });
       }
     });
+  }
+
+  void connect() {
+    socket = IO.io("http://192.168.43.106:5000", <String, dynamic>{
+      "transports": ["websocket"],
+      "autoConnect": false,
+    });
+    socket.connect();
+    socket.emit("/test","Hello Darling");
+    socket.onConnect(
+      (data) => print("Connected in flutter Bitch!"),
+    );
   }
 
   @override
@@ -143,7 +160,7 @@ class _IndividualPageState extends State<IndividualPage> {
               child: Stack(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height-140,
+                    height: MediaQuery.of(context).size.height - 140,
                     child: ListView(
                       shrinkWrap: true,
                       children: [
@@ -190,6 +207,18 @@ class _IndividualPageState extends State<IndividualPage> {
                                   keyboardType: TextInputType.multiline,
                                   maxLines: 5,
                                   minLines: 1,
+                                  onChanged: (value){
+                                    if(value.length>0){
+                                      setState(() {
+                                        sendButton=true;
+                                      });
+                                    }
+                                    else{
+                                      setState(() {
+                                        sendButton=false;
+                                      });
+                                    }
+                                  },
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: "Type a message",
@@ -236,7 +265,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                 backgroundColor: Color(0xFF128C7E),
                                 child: IconButton(
                                   icon: Icon(
-                                    Icons.mic,
+                                    sendButton?Icons.send:Icons.mic,
                                     color: Colors.white,
                                   ),
                                   onPressed: () {},
