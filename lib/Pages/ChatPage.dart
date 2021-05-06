@@ -4,8 +4,10 @@ import 'package:flutter_app/Model/ChatsModel.dart';
 import 'package:flutter_app/Screens/SelectContact.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key key, this.chatmodels}) : super(key: key);
+  const ChatPage({Key key, this.chatmodels, this.sourcechat}) : super(key: key);
   final List<ChatModel> chatmodels;
+  final ChatModel sourcechat;
+
   @override
   _ChatPageState createState() => _ChatPageState();
 }
@@ -23,7 +25,10 @@ class _ChatPageState extends State<ChatPage> {
       ),
       body: ListView.builder(
         itemCount: widget.chatmodels.length,
-        itemBuilder: (context, index) => CustomCard(chatModel: widget.chatmodels[index]),
+        itemBuilder: (context, index) => CustomCard(
+          chatModel: widget.chatmodels[index],
+          sourcechat: widget.sourcechat,
+        ),
       ),
     );
   }

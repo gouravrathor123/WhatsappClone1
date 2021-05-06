@@ -8,8 +8,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class IndividualPage extends StatefulWidget {
-  const IndividualPage({Key key, this.chatModel}) : super(key: key);
+  const IndividualPage({Key key, this.chatModel, this.sourcechat})
+      : super(key: key);
   final ChatModel chatModel;
+  final ChatModel sourcechat;
 
   @override
   _IndividualPageState createState() => _IndividualPageState();
@@ -19,7 +21,7 @@ class _IndividualPageState extends State<IndividualPage> {
   bool show = false;
   FocusNode focusNode = FocusNode();
   IO.Socket socket;
-  bool sendButton=false;
+  bool sendButton = false;
 
   TextEditingController _controller = TextEditingController();
 
@@ -43,10 +45,18 @@ class _IndividualPageState extends State<IndividualPage> {
       "autoConnect": false,
     });
     socket.connect();
-    socket.emit("/test","Hello Darling");
+    socket.emit("signin", widget.sourcechat.id);
     socket.onConnect(
       (data) => print("Connected in flutter Bitch!"),
     );
+  }
+
+  void sendMessage(String message, int sourceId, int targetId) {
+    socket.emit("message", {
+      "message": message,
+      "sourceId": sourceId,
+      "targetId": targetId,
+    });
   }
 
   @override
@@ -207,15 +217,14 @@ class _IndividualPageState extends State<IndividualPage> {
                                   keyboardType: TextInputType.multiline,
                                   maxLines: 5,
                                   minLines: 1,
-                                  onChanged: (value){
-                                    if(value.length>0){
+                                  onChanged: (value) {
+                                    if (value.length > 0) {
                                       setState(() {
-                                        sendButton=true;
+                                        sendButton = true;
                                       });
-                                    }
-                                    else{
+                                    } else {
                                       setState(() {
-                                        sendButton=false;
+                                        sendButton = false;
                                       });
                                     }
                                   },
@@ -265,10 +274,18 @@ class _IndividualPageState extends State<IndividualPage> {
                                 backgroundColor: Color(0xFF128C7E),
                                 child: IconButton(
                                   icon: Icon(
-                                    sendButton?Icons.send:Icons.mic,
+                                    sendButton ? Icons.send : Icons.mic,
                                     color: Colors.white,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    if (sendButton) {
+                                      sendMessage(
+                                          _controller.text,
+                                          widget.sourcechat.id,
+                                          widget.chatModel.id);
+                                      _controller.clear();
+                                    }
+                                  },
                                 ),
                               ),
                             ),

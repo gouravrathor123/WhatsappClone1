@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/CameraScreen.dart';
 import 'package:flutter_app/Screens/LoginScreen.dart';
 
-import 'Screens/HomeScreen.dart';
-
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   cameras=await availableCameras();
