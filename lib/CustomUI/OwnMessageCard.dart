@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OwnMessageCard extends StatelessWidget {
+  final String message;
+  const OwnMessageCard({Key key, this.message}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -25,7 +27,7 @@ class OwnMessageCard extends StatelessWidget {
                     bottom: 20
                 ),
                 child: Text(
-                  "Hey There!",
+                  message,
                   style: TextStyle(fontSize: 16),
                 ),
               ),

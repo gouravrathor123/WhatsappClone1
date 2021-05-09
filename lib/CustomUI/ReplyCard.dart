@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ReplyCard extends StatelessWidget {
+  final String msg;
+
+  const ReplyCard({Key key, this.msg}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -21,7 +24,7 @@ class ReplyCard extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     left: 10, right: 60, top: 5, bottom: 20),
                 child: Text(
-                  "Han Bol Bhai!",
+                  msg,
                   style: TextStyle(fontSize: 16),
                 ),
               ),
