@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/Model/ChatsModel.dart';
 import 'package:flutter_app/Pages/CameraPage.dart';
 import 'package:flutter_app/Pages/ChatPage.dart';
+import 'package:flutter_app/Pages/StatusPage.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key, this.chatmodels,this.sourcechat}) : super(key: key);
@@ -84,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen>
         children: [
           CameraPage(),
           ChatPage(chatmodels: widget.chatmodels,sourcechat: widget.sourcechat,),
-          Text("STATUS"),
+          StatusPage(),
           Text("CALLS"),
         ],
       ),
