@@ -42,7 +42,7 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   void connect() {
-    socket = IO.io("http://192.168.43.106:5000", <String, dynamic>{
+    socket = IO.io("https://safe-lake-23090.herokuapp.com/", <String, dynamic>{
       "transports": ["websocket"],
       "autoConnect": false,
     });
@@ -54,12 +54,11 @@ class _IndividualPageState extends State<IndividualPage> {
         print(msg);
         setMessage("destination", msg["message"]);
         if (sendButton) {
-        _scrollController.animateTo(
-        _scrollController
-            .position.maxScrollExtent,
-        duration:
-        Duration(milliseconds: 300),
-        curve: Curves.easeOut);}
+          _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeOut);
+        }
       });
     });
     print(socket.connected);
@@ -79,7 +78,7 @@ class _IndividualPageState extends State<IndividualPage> {
       type: type,
       message: message,
       time: DateTime.now().toString().substring(10, 16),
-     );
+    );
     setState(() {
       messages.add(messageModel);
     });
