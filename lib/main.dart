@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/NewScreen/LandingScreen.dart';
 import 'package:flutter_app/Screens/CameraScreen.dart';
 import 'package:flutter_app/Screens/LoginScreen.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xFF075E54),
         accentColor: Color(0xFF128C7E),
       ),
-      home: LoginScreen (),
+      home: LandingScreen (),
     );
   }
 }
