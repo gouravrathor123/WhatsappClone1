@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/NewScreen/LoginPage.dart';
 import 'package:path/path.dart';
 
 class LandingScreen extends StatelessWidget {
@@ -60,7 +61,12 @@ class LandingScreen extends StatelessWidget {
                 height: 20,
               ),
               InkWell(
-                onTap: (){},
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (builder) => LoginPage()),
+                      (route) => false);
+                },
                 child: Container(
                   width: MediaQuery.of(context).size.width - 110,
                   height: 50,
