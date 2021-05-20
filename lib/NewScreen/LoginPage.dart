@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Model/CountryModel.dart';
 import 'package:flutter_app/NewScreen/CountryPage.dart';
@@ -13,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String countryName = "India";
   String countryCode = "+91";
+  TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +62,33 @@ class _LoginPageState extends State<LoginPage> {
               height: 5,
             ),
             number(),
+            Expanded(
+              child: Container(),
+            ),
+            InkWell(
+              onTap: () {
+                if(_controller.text.length<10){
+                  showdilogue();
+                }
+                else{
+                  showMydilogue();
+                }
+              },
+              child: Container(
+                color: Colors.tealAccent[400],
+                height: 40,
+                width: 70,
+                child: Center(
+                  child: Text(
+                    "NEXT",
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 40,
+            ),
           ],
         ),
       ),
@@ -113,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       width: MediaQuery.of(context).size.width / 1.5,
       height: 38,
+      padding: EdgeInsets.symmetric(vertical: 9),
       child: Row(
         children: [
           Container(
@@ -124,12 +154,15 @@ class _LoginPageState extends State<LoginPage> {
             ),
             child: Row(
               children: [
+                SizedBox(
+                  width: 10,
+                ),
                 Text(
                   "+",
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(
-                  width: 20,
+                  width: 15,
                 ),
                 Text(
                   countryCode.substring(1),
@@ -151,12 +184,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
             width: MediaQuery.of(context).size.width / 1.5 - 100,
             child: TextFormField(
+              controller: _controller,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.all(8),
-                hintText: "Phone Number"
-              ),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(8),
+                  hintText: "Phone Number"),
             ),
           ),
         ],
@@ -171,4 +204,79 @@ class _LoginPageState extends State<LoginPage> {
     });
     Navigator.pop(context);
   }
+
+  Future<void> showMydilogue() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "We will be verifying your phone Number",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  SizedBox(height: 10,),
+                  Text(
+                    countryCode + " " + _controller.text,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    "Is this ok, or would you like to edit the number?",
+                    style: TextStyle(fontSize: 13.5),
+                  )
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Edit"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Ok"),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> showdilogue() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "There is no number you entered",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Ok"),
+              ),
+            ],
+          );
+        });
+  }
+
+
 }
