@@ -40,6 +40,7 @@ dependencies:
   path:
   video_player: ^2.1.1
   socket_io_client: ^1.0.0
+  otp_text_field: ^1.1.1
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Model/CountryModel.dart';
 import 'package:flutter_app/NewScreen/CountryPage.dart';
+import 'package:flutter_app/Screens/OtpScreen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -67,10 +68,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             InkWell(
               onTap: () {
-                if(_controller.text.length<10){
+                if (_controller.text.length < 10) {
                   showdilogue();
-                }
-                else{
+                } else {
                   showMydilogue();
                 }
               },
@@ -219,7 +219,9 @@ class _LoginPageState extends State<LoginPage> {
                     "We will be verifying your phone Number",
                     style: TextStyle(fontSize: 14),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     countryCode + " " + _controller.text,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
@@ -241,6 +243,15 @@ class _LoginPageState extends State<LoginPage> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (builder) => OtpScreen(
+                        countryCode: countryCode,
+                        number: _controller.text,
+                      ),
+                    ),
+                  );
                 },
                 child: Text("Ok"),
               ),
@@ -277,6 +288,4 @@ class _LoginPageState extends State<LoginPage> {
           );
         });
   }
-
-
 }

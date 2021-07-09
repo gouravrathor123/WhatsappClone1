@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xFF075E54),
         accentColor: Color(0xFF128C7E),
       ),
-      home: LandingScreen (),
+      home: LoginScreen (),
     );
   }
 }
