@@ -5,7 +5,10 @@ import 'package:flutter_app/CustomUI/OwnMessageCard.dart';
 import 'package:flutter_app/CustomUI/ReplyCard.dart';
 import 'package:flutter_app/Model/ChatsModel.dart';
 import 'package:flutter_app/Model/MessageModel.dart';
+import 'package:flutter_app/Screens/CameraScreen.dart';
+import 'package:flutter_app/Screens/CameraView.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class IndividualPage extends StatefulWidget {
@@ -26,6 +29,8 @@ class _IndividualPageState extends State<IndividualPage> {
   List<MessageModel> messages = [];
   TextEditingController _controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
+  ImagePicker _picker = ImagePicker();
+  PickedFile file;
 
   @override
   void initState() {
@@ -285,8 +290,17 @@ class _IndividualPageState extends State<IndividualPage> {
                                             },
                                           ),
                                           IconButton(
-                                              icon: Icon(Icons.camera_alt),
-                                              onPressed: () {}),
+                                            icon: Icon(Icons.camera_alt),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CameraScreen(),
+                                                ),
+                                              );
+                                            },
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -376,16 +390,42 @@ class _IndividualPageState extends State<IndividualPage> {
               Row(
                 children: [
                   Expanded(
-                    child: iconcreation(
-                        Icons.insert_drive_file, Colors.indigo, "Document"),
-                  ),
-                  Expanded(
-                    child:
-                        iconcreation(Icons.camera_alt, Colors.pink, "Camera"),
+                    child: iconcreation(Icons.insert_drive_file, Colors.indigo,
+                        "Document", () {}),
                   ),
                   Expanded(
                     child: iconcreation(
-                        Icons.insert_photo, Colors.purple, "Gallery"),
+                      Icons.camera_alt,
+                      Colors.pink,
+                      "Camera",
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (builder) => CameraScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: iconcreation(
+                      Icons.insert_photo,
+                      Colors.purple,
+                      "Gallery",
+                      () async {
+                        file =
+                            await _picker.getImage(source: ImageSource.gallery);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (builder) => CameraViewPage(
+                              path: file.path,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -395,15 +435,16 @@ class _IndividualPageState extends State<IndividualPage> {
               Row(
                 children: [
                   Expanded(
-                    child: iconcreation(Icons.headset, Colors.orange, "Audio"),
+                    child: iconcreation(
+                        Icons.headset, Colors.orange, "Audio", () {}),
                   ),
                   Expanded(
                     child: iconcreation(
-                        Icons.location_pin, Colors.green, "Location"),
+                        Icons.location_pin, Colors.green, "Location", () {}),
                   ),
                   Expanded(
-                    child:
-                        iconcreation(Icons.person, Colors.lightBlue, "Contact"),
+                    child: iconcreation(
+                        Icons.person, Colors.lightBlue, "Contact", () {}),
                   ),
                 ],
               ),
@@ -414,9 +455,9 @@ class _IndividualPageState extends State<IndividualPage> {
     );
   }
 
-  Widget iconcreation(IconData icon, Color color, String text) {
+  Widget iconcreation(IconData icon, Color color, String text, Function onTap) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Column(
         children: [
           CircleAvatar(
